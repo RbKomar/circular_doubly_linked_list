@@ -1,0 +1,131 @@
+#ifndef RING_TESTS_H
+#define RING_TESTS_H
+
+#include "Ring.h"
+#include "Split.h"
+#include<vector>
+
+void inserting_test()
+{
+    vector<string> ans = {"push_front", "push_back", "insert"};
+    bool passed = true;
+    Ring<int, string> ring;
+    ring.push_back(1, "push_back");
+    ring.push_back(2, "push_back");
+    ring.push_back(3, "push_back");
+    ring.push_front(-1, "push_front");
+    ring.push_front(-2, "push_front");
+    ring.push_front(-3, "push_front");
+    ring.insert(0, "insert", -1, 1);
+    int c = 0;
+    for (auto it = ring.cbegin(); it != ring.cend() ; ++it, ++c)
+    {
+        if(c<=2) passed &= (*it).info == ans[0];
+        else if(c==3) passed &= ((*it).info == ans[2]);
+        else if(c>3) passed &= ((*it).info == ans[1]);
+    }
+    passed &= ((*ring.cend()).info == ans[1]);
+    if(passed) cout<< "INSERTING TEST PASSED"<<endl;
+    else cout<< "INSERTING TEST NOT PASSED"<<endl;
+}
+
+void reversing_test()
+{
+    vector<string> ans = {"3", "2", "1"};
+    bool passed = true;
+
+    Ring<int, string> ring;
+    ring.push_back(1, "1");
+    ring.push_back(1, "2");
+    ring.push_back(1, "3");
+
+    ring = ring.reverse();
+
+    int c =0;
+    for (auto it = ring.cbegin(); it != ring.cend() ; ++it, c++)
+    {
+        auto elem = *it;
+        passed &= (elem.info == ans[c]);
+    }
+    passed &= ((*ring.cend()).info == ans[2]);
+
+    if(passed) cout<< "REVERSING TEST PASSED"<<endl;
+    else cout<< "REVERSING TEST NOT PASSED"<<endl;
+
+
+}
+
+void operators_test()
+{
+    vector<string> ans = {"ring", "ring2", "ring3"};
+    bool passed = true;
+    Ring<int, string> ring;
+    Ring<int, string> ring2;
+    Ring<int, string> ring3;
+    ring2.push_back(1, "ring2");
+    ring2.push_back(2, "ring2");
+    ring2.push_back(3, "ring2");
+    ring.push_front(3, "ring");
+    ring.push_front(2, "ring");
+    ring.push_front(1, "ring");
+    ring3.push_back(0, "ring3");
+
+    ring += ring3;
+    ring = ring + ring2;
+
+    int c = 0;
+    for (auto it = ring.cbegin(); it != ring.cend() ; ++it, ++c)
+    {
+        if(c<=2) passed &= (*it).info == ans[0];
+        else if(c==3) passed &= ((*it).info == ans[2]);
+        else if(c>3) passed &= ((*it).info == ans[1]);
+    }
+    passed &= ((*ring.cend()).info == ans[1]);
+    if(passed) cout<< "OPERATORS TEST PASSED"<<endl;
+    else cout<< "OPERATORS TEST NOT PASSED"<<endl;
+}
+
+void removing_test(){
+    bool passed = true;
+    Ring<int, int> ring;
+    ring.push_back(1,1);
+    ring.push_back(2,2);
+    ring.push_back(3,3);
+    ring.push_front(3,3);
+
+    ring.remove(3, 2);
+    passed &= ((*(ring.cend())).info == 2);
+    passed &= (ring.length() == 3);
+    ring.remove(3, 1);
+    passed &= ((*(ring.cbegin())).info == 1);
+    passed &= (ring.length() == 2);
+
+    ring.clear();
+    passed &= ring.is_empty();
+
+    if(passed) cout<< "REMOVING TEST PASSED"<<endl;
+    else cout<< "REMOVING TEST NOT PASSED"<<endl;
+}
+
+void split_test()
+{
+    Ring<int, int> ring1, ring2;
+    Ring<int, int> source;
+
+    vector<int> ans1 = {3,4,5,8,9,0,3,4,5,8};
+    vector<int> ans2 = {6,7,6,2,1,7};
+
+    for (int i = 1; i < 10; ++i) {
+        source.push_back(i, i);
+    }
+    source.push_back(10, 0);
+
+    split(source, 2, 16, true,
+            ring1, 3, true,
+            ring2, 2, false);
+    auto it1 = ring1.cbegin();
+    auto it2 = ring2.cbegin();
+
+}
+
+#endif //RING_TESTS_H
