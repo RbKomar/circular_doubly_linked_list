@@ -112,6 +112,7 @@ void split_test()
     Ring<int, int> ring1, ring2;
     Ring<int, int> source;
 
+    bool passed = true;
     vector<int> ans1 = {3,4,5,8,9,0,3,4,5,8};
     vector<int> ans2 = {6,7,6,2,1,7};
 
@@ -125,6 +126,20 @@ void split_test()
             ring2, 2, false);
     auto it1 = ring1.cbegin();
     auto it2 = ring2.cbegin();
+
+    for(int i= 0; it1 != ring1.cend(); ++it1, ++i) {
+        auto elem = *it1;
+        passed &= (elem.info == ans1[i]);
+    }
+    passed &= ((*ring1.cend()).info == ans1[9]);
+    for(int j= 0; it2 != ring2.cend(); ++it2, ++j) {
+        auto elem = *it2;
+        passed &= (elem.info == ans2[j]);
+    }
+    passed &= ((*ring2.cend()).info == ans2[5]);
+
+    if(passed) cout<< "SPLIT TEST PASSED"<<endl;
+    else cout<< "SPLIT TEST NOT PASSED"<<endl;
 
 }
 

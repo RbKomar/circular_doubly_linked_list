@@ -69,7 +69,7 @@ public:
     const_iter search(const Key&, int) const; // returns a constant iterator pointing to a searched element / nullptr if not found
 
     void move_backward();
-    void move_frontward();
+    void move_forward();
 
 private:
     int size;
@@ -351,7 +351,7 @@ void Ring<Key, Info>::move_backward() {
 }
 
 template<typename Key, typename Info>
-void Ring<Key, Info>::move_frontward() {
+void Ring<Key, Info>::move_forward() {
     if(size == 0) return;
     else
     {
