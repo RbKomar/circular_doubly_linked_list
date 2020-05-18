@@ -107,6 +107,32 @@ void removing_test(){
     else cout<< "REMOVING TEST NOT PASSED"<<endl;
 }
 
+void subring_test()
+{
+    vector<int> ans = {3,4,5,6,7,8,9,10};
+    bool passed = true;
+
+    Ring<int, int> ring;
+    for (int i = 1; i < 10; ++i) {
+        ring.push_back(i, i);
+    }
+    ring.push_back(1, 10);
+
+    Ring sub_ring = ring.sub_ring(3, 1, 1, 1);
+    auto it = sub_ring.cbegin();
+
+    for(int i= 0; it != sub_ring.cend(); ++it, ++i) {
+        auto elem = *it;
+        passed &= (elem.info == ans[i]);
+    }
+
+    passed &= ((*sub_ring.cend()).info == ans[7]);
+
+    if(passed) cout<< "SUB_RING TEST PASSED"<<endl;
+    else cout<< "SUB_RING TEST NOT PASSED"<<endl;
+
+}
+
 void split_test()
 {
     Ring<int, int> ring1, ring2;

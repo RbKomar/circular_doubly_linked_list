@@ -382,12 +382,13 @@ Ring<Key, Info> Ring<Key, Info>::sub_ring(const Key &skey, int spos, const Key &
             if(scnt == spos) create = true;
         }
 
-        if(create) subRing.push_back(elem.key, elem.info);
-
-        if(elem.key == ekey)
-        {
-            ecnt++;
-            if(ecnt == epos) return subRing;
+        if(create){
+            subRing.push_back(elem.key, elem.info);
+            if(elem.key == ekey)
+            {
+                ecnt++;
+                if(ecnt == epos) return subRing;
+            }
         }
     }
     subRing.push_back((*end()).key, (*end()).info);

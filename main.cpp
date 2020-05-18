@@ -8,6 +8,7 @@ int main() {
     reversing_test();
     operators_test();
     removing_test();
+    subring_test();
     split_test();
 
     return 0;
