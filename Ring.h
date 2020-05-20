@@ -37,14 +37,14 @@ private:
 
 public:
 
-    Ring() : head(nullptr), tail(nullptr), size(0){};
-    ~Ring();
+    Ring<Key, Info>() : head(nullptr), tail(nullptr), size(0){};
+    ~Ring<Key, Info>();
 
-    void copy_all_elements(const Ring&);
+    void copy_all_elements(const Ring<Key, Info>&);
 
-    Ring& operator=(const Ring &); // overloading operator=
-    Ring operator+(const Ring &); // overloading operator+
-    void operator+=(const Ring &); // overloading operator+=
+    Ring<Key, Info>& operator=(const Ring<Key, Info> &); // overloading operator=
+    Ring<Key, Info> operator+(const Ring<Key, Info> &); // overloading operator+
+    void operator+=(const Ring<Key, Info> &); // overloading operator+=
 
     bool is_empty() const; // returns true if the ring is empty
     void clear(); // clears the list
@@ -80,27 +80,27 @@ private:
 
 template<typename Key, typename Info>
 RingIterator<Key,Info> Ring<Key, Info>::begin() {
-    return RingIterator(head);
+    return RingIterator<Key, Info>(head);
 }
 
 template<typename Key, typename Info>
 RingIterator<Key,Info> Ring<Key, Info>::end() {
-    return RingIterator(tail);
+    return RingIterator<Key, Info>(tail);
 }
 
 template<typename Key, typename Info>
 constRingIterator<Key,Info> Ring<Key, Info>::cbegin() const {
-    return constRingIterator(head);
+    return constRingIterator<Key, Info>(head);
 }
 
 template<typename Key, typename Info>
 constRingIterator<Key,Info> Ring<Key, Info>::cend() const {
-    return constRingIterator(tail);
+    return constRingIterator<Key, Info>(tail);
 }
 
 template<typename Key, typename Info>
 pair<Key, Info> Ring<Key, Info>::front() const {
-    assert(head != nullptr);
+    assert(head != nullptr); // zamiast assertow -> if (assert jest zbyt pewny siebie)
     return make_pair(head->key, head->info);
 }
 
@@ -123,9 +123,12 @@ void Ring<Key, Info>::copy_all_elements(const Ring &x)  {
 
 template<typename Key, typename Info>
 Ring<Key, Info> &Ring<Key, Info>::operator=(const Ring &x) {
-    clear();
-    copy_all_elements(x);
-    size = x.length();
+    if(this != &x)
+    {
+        clear();
+        copy_all_elements(x);
+        size = x.length();
+    }
     return *this;
 }
 
@@ -205,29 +208,29 @@ void Ring<Key, Info>::insert(const Key &akey, const Info &ainfo, const Key &wher
 }
 
 template<typename Key, typename Info>
-RingIterator<Key,Info> Ring<Key, Info>::search_inside(const Key &where, int pos) {
+RingIterator<Key,Info> Ring<Key, Info>::search_inside(const Key &where, int pos) { // const
     int c = 0; // holing numbers of key repetitions
     if(head==tail && head == nullptr){
         cout<<"Empty list, nothing to search_inside"<<endl;
     }else
+    {
+        for (auto it = begin(); it != end(); ++it)
         {
-            for (auto it = begin(); it != end(); ++it)
-            {
-                if( (*it).key == where){
-                    c++;
-                    if(c == pos)
-                    {
-                        return Ring::iter(it);
-                    }
-                }
-            }
-            if((*end()).key == where){
+            if( (*it).key == where){
                 c++;
-                if(c == pos){
-                    return end();
+                if(c == pos)
+                {
+                    return Ring::iter(it);
                 }
             }
         }
+        if((*end()).key == where){
+            c++;
+            if(c == pos){
+                return end();
+            }
+        }
+    } // do while, mozna uzywac zamiast fora
     return Ring::iter();
 }
 

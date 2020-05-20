@@ -118,7 +118,7 @@ void subring_test()
     }
     ring.push_back(1, 10);
 
-    Ring sub_ring = ring.sub_ring(3, 1, 1, 1);
+    Ring<int, int> sub_ring = ring.sub_ring(3, 1, 1, 1);
     auto it = sub_ring.cbegin();
 
     for(int i= 0; it != sub_ring.cend(); ++it, ++i) {
@@ -148,8 +148,8 @@ void split_test()
     source.push_back(10, 0);
 
     split(source, 2, 16, true,
-            ring1, 3, true,
-            ring2, 2, false);
+          ring1, 3, true,
+          ring2, 2, false);
     auto it1 = ring1.cbegin();
     auto it2 = ring2.cbegin();
 
